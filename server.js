@@ -3,10 +3,20 @@
 const express = require('express');
 const  app = express();
 const PORT = process.env.PORT ||  3000;
+app.set('view engine', 'jade');
+
+app.get('/', (req, res) => {
+
+  res.render('index', {
+    title: 'Super Cool App',
+    date: new Date()
+  });
+});
+
 
 app.get('/hello', (req, res) => {
   const name = req.query.name;
-  const message = '<h1>Hello ${ name }!</h1>';
+  const message = `<h1>Hello ${ name }!</h1>`;
   console.log('PARAMS>>>>>', req.query)
   res.writeHead(200, {
   'Content-Type': 'text/html'
@@ -54,9 +64,8 @@ res.send('<h1>' + display + '</h1>');
 
 });
 
-
 app.listen(PORT, () => {
 
-  console.log('node.js server started. Listening on port ${PORT}');
+  console.log(`node.js server started. Listening on port ${PORT}`);
 });
 

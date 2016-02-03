@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/rsheldon3ayers/node-webserver#readme",
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "install": "^0.4.1",
+    "jade": "^1.11.0"
   },
   "devDependencies": {
     "nodemon": "^1.8.1"

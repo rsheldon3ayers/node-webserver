@@ -2,16 +2,72 @@
 
 const express = require('express');
 const  app = express();
+const path = require('path');
+const imgur = require('imgur');
 const PORT = process.env.PORT ||  3000;
+
+// const bodyParser = require('body-parser');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+
+  destination: (req, file, cb) => {
+    cb(null, 'tmp/uploads')},
+
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+    console.log(file);
+    }
+  });
+const upload = multer({ storage: storage})
+
 app.set('view engine', 'jade');
+app.locals.title= "Not So Cool App";
+
+// app.use(bodyParser.urlencoded({extended: false}))
+
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
 
   res.render('index', {
-    title: 'Super Cool App',
     date: new Date()
   });
+
 });
+app.get('/contact', (req, res) => {
+    res.render('contact');
+});
+
+
+
+app.post('/contact', (req, res) =>{
+    const name = req.body.name;
+    res.send(`<h1>Thanks for contacting us ${name}</h1>`)
+
+})
+app.get('/sendPhoto', (req, res) => {
+
+  res.render('sendPhoto');
+});
+
+app.post('/sendPhoto', upload.single('image'), (req, res) => {
+  console.log(req.file);
+  const path = req.file.path
+
+  imgur.uploadFile(path)
+    .then(function (json) {
+        console.log(json.data.link);
+    })
+    .catch(function (err) {
+        console.error(err.message);
+    });
+
+
+  res.send('<h1>Thanks for that</h1>');
+});
+
 
 
 app.get('/hello', (req, res) => {
